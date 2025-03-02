@@ -1,0 +1,80 @@
+export DISPLAY=:0
+120 GB>> /biosboot -2000
+	/boot-2000
+	/swap-16000
+	/10000
+	/tmp 10000
+	swap 8000
+	/u01 unlimited
+
+groupadd oinstall 
+groupadd dba 
+
+
+useradd -g oinstall -d /home/oracle -s /bin/bash -c "oracle DB Owner" oracle
+usermod -a -G dba oracle
+
+passwd oracle
+
+mkdir -p /u01/app/oracle/product/19.0.0.0/dbhome_1      
+chmod -R 777 /u01
+chown -R oracle: /u01
+
+ls -ld /u01/app/oracle/product/19.0.0.0/dbhome_1
+go to software location
+cd /media
+
+unzip V982063-01-001.zip -d /u01/app/oracle/product/19.0.0.0/dbhome_1/
+chmod -R 777 /u01
+chown -R oracle: /u01
+
+init 6 --(restart)
+login as oracle
+cd /u01/app/oracle/product/19.0.0.0/dbhome_1/
+./runInstaller
+create software only 
+
+
+
+ 
+
+single instance database
+enterprise edition
+oracle base : /u01/app/oracle
+create inventory next
+all oinstall groups
+dont automatically run  
+
+run fix ups
+run below from root user
+yum install ksh*
+yum install libaio*
+
+
+--- create database 
+/u01/app/oracle/product/19.0.0.0/dbhome_1/bin/dbca	
+create database
+cat /etc/oratab
+
+
+setting bash profile
+go to /home/oracle
+vi .bash_profile
+
+export ORACLE_BASE=/u01/app/oracle
+export ORACLE_HOME=/u01/app/oracle/product/19.0.0.0/dbhome_1 
+
+export ORACLE_SID=BLTTDB
+
+
+PATH=$PATH:$HOME/.local/bin:$ORACLE_HOME/bin
+
+export PATH
+
+:wq!( or shiftt z z )
+
+#source.bash_profile
+
+change host name
+
+hostnamectl set-hostname sandviks.com
